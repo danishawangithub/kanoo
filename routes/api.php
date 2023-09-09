@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\TransactionController;
+use App\Http\Controllers\API\Store\GiftkardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,5 +27,20 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('register', 'register');
     Route::post('logout', 'logout');
-
 });
+
+
+Route::controller(TransactionController::class)->prefix('transactions')->group(function () {
+    Route::get('index', 'index');
+});
+
+Route::controller(GiftkardController::class)->prefix("giftkard")->group(function () {
+    Route::get('index', 'index'); 
+    Route::post('store', 'store');  
+    Route::get('view/{id}', 'show');  
+    Route::get('delete/{id}', 'destroy');  
+    Route::post('update/{id}', 'update');  
+});
+
+
+
