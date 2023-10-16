@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Giftkard;
+use App\Models\Fund;
 use Illuminate\Http\Request;
 
-class GiftkardController extends Controller
+class FundController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class GiftkardController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Giftkard  $giftkard
+     * @param  \App\Models\Fund  $fund
      * @return \Illuminate\Http\Response
      */
-    public function show(Giftkard $giftkard)
+    public function show(Fund $fund)
     {
         //
     }
@@ -52,10 +52,10 @@ class GiftkardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Giftkard  $giftkard
+     * @param  \App\Models\Fund  $fund
      * @return \Illuminate\Http\Response
      */
-    public function edit(Giftkard $giftkard)
+    public function edit(Fund $fund)
     {
         //
     }
@@ -64,10 +64,10 @@ class GiftkardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Giftkard  $giftkard
+     * @param  \App\Models\Fund  $fund
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Giftkard $giftkard)
+    public function update(Request $request, Fund $fund)
     {
         //
     }
@@ -75,10 +75,10 @@ class GiftkardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Giftkard  $giftkard
+     * @param  \App\Models\Fund  $fund
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Giftkard $giftkard)
+    public function destroy(Fund $fund)
     {
         //
     }

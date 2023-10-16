@@ -5,10 +5,8 @@ namespace App\Http\Controllers\API\Store;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
-use App\Models\Giftkard;
-
-class GiftkardController extends Controller
+use App\Models\Category;
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +15,8 @@ class GiftkardController extends Controller
      */
     public function index()
     {
-        $giftkards = Giftkard::all();
-        return response()->json(['giftkards' => $giftkards]);
-
+        $categories = Category::all();
+        return response()->json(['categories' => $categories]);
     }
 
     /**
@@ -29,7 +26,7 @@ class GiftkardController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -41,7 +38,7 @@ class GiftkardController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'giftkardname' => 'required|max:255',
+            'name' => 'required',
         ]);
         
         if ($validator->fails()) {
@@ -51,29 +48,20 @@ class GiftkardController extends Controller
         if ($request->hasFile('image')) {
             $img = $request->file('image');
             $imgName = time() . '.' . $img->getClientOriginalExtension();
-            $img->move(public_path('images/store/giftkard/'), $imgName);
+            $img->move(public_path('images/store/category/'), $imgName);
         }
 
-        $giftkard = new Giftkard;
-        $giftkard->name = $request->giftkardname;
-        $giftkard->image = $imgName;
-        $giftkard->amount_type = $request->amountType;
-        if ($giftkard->amount_type == 'singleValue') {
-            $giftkard->amount = $request->amount;
-        }else{
-            $giftkard->amount_start = $request->amount_start;
-            $giftkard->amount_end = $request->amount_end;
-        }
-        $giftkard->description = $request->description;
-        $giftkard->location = $request->location;
-        $giftkard->promote_wallet = $request->promote_wallet;
-        $giftkard->redeemable_points = $request->redeemable_points;
-        $giftkard->number_points = $request->number_points;
-        $giftkard->redeemable_points = $request->redeemable_points;
-        $giftkard->creation_cost = $request->creation_cost;
-        $giftkard->save();
+        $category = new Category;
+        $category->name = $request->productname;
+        $category->image = $imgName;
+        $category->rank = $request->rank;
+        $category->description = $request->description;
+        $category->sub_category = $request->sub_category;
+        $category->include_main_menu = $request->include_main_menu;
+        $category->products_in_category = $request->products_in_category;
+        $category->save();
 
-        return response()->json(['message' => 'Giftkard added successfully']);
+        return response()->json(['message' => 'Category added successfully']);
     }
 
     /**
@@ -84,11 +72,11 @@ class GiftkardController extends Controller
      */
     public function show($id)
     {
-        $giftkard = Giftkard::find($id);
-        if (!$giftkard) {
-            return response()->json(['error' => 'Giftkard not found'], 404);
+        $product = Category::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
         }
-        return response()->json(['giftkard' => $giftkard]);
+        return response()->json(['product' => $product]);
     }
 
     /**
@@ -99,11 +87,11 @@ class GiftkardController extends Controller
      */
     public function edit($id)
     {
-        $giftkard = Giftkard::find($id);
-        if (!$giftkard) {
-            return response()->json(['error' => 'Giftkard not found'], 404);
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], 404);
         }
-        return response()->json(['giftkard' => $giftkard]);
+        return response()->json(['category' => $category]);
     }
 
     /**
@@ -114,34 +102,33 @@ class GiftkardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {   
+    {
         $validator = Validator::make($request->all(), [
-            'giftkardname' => 'required|max:255',
+            'name' => 'required',
         ]);
         
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $giftkard = Giftkard::find($id);
+        $category = Category::find($id);
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imgName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/store/giftkard/'), $imgName);
+            $image->move(public_path('images/store/category/'), $imgName);
 
             // Delete previous image if exists
-            if ($giftkard->image) {
-                $previousPhotoPath = public_path('images/store/giftkard') . '/' . $giftkard->image;
+            if ($category->image) {
+                $previousPhotoPath = public_path('images/store/category') . '/' . $category->image;
                 if (file_exists($previousPhotoPath)) {
                     unlink($previousPhotoPath);
                 }
             }
-            $giftkard->image = $imgName;
+            $category->image = $imgName;
         }
-        $giftkard->update($request->except('image'));
-        return response()->json(['message' => 'Giftkard updated successfully']);
-        
+        $category->update($request->except('image'));
+        return response()->json(['message' => 'Category updated successfully']);
     }
 
     /**
@@ -151,15 +138,13 @@ class GiftkardController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
-
-        $giftkard = Giftkard::find($id);
-        if (!$giftkard) {
-            return response()->json(['error' => 'Giftkard not found'], 404);
+    {
+        $category = Category::find($id);
+        if (!$category) {
+            return response()->json(['error' => 'Category not found'], 404);
         }
 
-        $giftkard->delete();
-
-        return response()->json(['message' => 'Giftkard deleted successfully']);
+        $category->delete();
+        return response()->json(['message' => 'Category deleted successfully']);
     }
 }
